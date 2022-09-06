@@ -31,6 +31,7 @@ void signal_handler(int sig)
 
 void on_read(uv_poll_t* handle, int status, int events) {
     if (isExit) {
+        printf("Poll Exit");
         uv_poll_stop(handle);
         return;
     }
@@ -40,6 +41,7 @@ void on_read(uv_poll_t* handle, int status, int events) {
     // impossible
     if (len < 0) return;
     t->buf->len = len;
+    printf("Recv: %ld\n", len);
 }
 
 
