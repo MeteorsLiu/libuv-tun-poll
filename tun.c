@@ -65,21 +65,21 @@ int tun_create(char if_name[IFNAMSIZ], const char *wanted_name)
 
 
 int main(void) {
-    struct tunContext t;
-    struct Buffer b;
-    b.vec.iov_len = 1500;
-    b.vec.iov_base = b.data;
-    t.fd = tun_create(t.if_name, "tun-0");
-    if (t.fd < 0) {
+    ctx t = malloc(sizeof struct tunContext);
+    buffer b = malloc(sizeof struct Buffer)
+    b->vec.iov_len = 1500;
+    b->vec.iov_base = b.data;
+    t->fd = tun_create(t.if_name, "tun-0");
+    if (t->fd < 0) {
         goto exit;
     }
-    t.buf = &b;
-    if (pipe(t.pipefd) < 0) {
+    t->buf = b;
+    if (pipe(t->pipefd) < 0) {
         goto exit;
     }
     uv_poll_init(uv_default_loop(), &t.poll_handle, t.fd);
     uv_poll_start(&t.poll_handle, UV_READABLE, on_read);
-    uv_default_loop()->data = (void *)&t;
+    uv_default_loop()->data = (void *)t;
     signal(SIGINT, signal_handler);
     signal(SIGTERM, signal_handler);
     signal(SIGQUIT, signal_handler);
@@ -91,5 +91,7 @@ exit:
         close(t.pipefd[0]);
         close(t.pipefd[1]);
     }
+    free(t);
+    free(b);
     return 0;
 }

@@ -4,6 +4,7 @@
 #include <uv.h>
 #include <signal.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <net/if.h>
 #include <linux/if.h>
 #include <linux/if_tun.h>
@@ -16,7 +17,7 @@
 #include <string.h>
 
 typedef struct Buffer * buffer;
-
+typedef struct tunContext * ctx;
 void on_read(uv_poll_t* handle, int status, int events);
 
 #endif
