@@ -39,11 +39,8 @@ void on_read(uv_poll_t* handle, int status, int events) {
         exit_uv();
         return;
     }
-    // reset the buffer
-    memset(t->buf->vec.iov_base, 0, t->buf->vec.iov_len);
-    // zero copy to user space buffer from pipe buffer
-    vmsplice(t->pipefd[0], &t->buf->vec, len, SPLICE_F_MOVE | SPLICE_F_GIFT);
-    printf("Recv: %d", t->buf->vec.iov_len);
+
+    printf("Recv: %ld", len);
 
 }
 
