@@ -14,6 +14,8 @@ struct tunContext
 };
 
 
+static int isExit = 0;
+
 void exit_uv() {
     uv_stop(uv_default_loop());
     uv_loop_close(uv_default_loop());
@@ -23,15 +25,21 @@ void exit_uv() {
 
 void signal_handler(int sig)
 {
+   isExit = 1;
    exit_uv();
 }
 
 void on_read(uv_poll_t* handle, int status, int events) {
+    if (isExit) {
+        uv_poll_stop(handle);
+        return;
+    }
     ctx t = (ctx)handle->data;
     ssize_t len = 0;
     len = read(t->fd, t->buf->data, 1500);
+    // impossible
+    if (len < 0) return;
     t->buf->len = len;
-    printf("Recv: %ld\n", t->buf->len);
 }
 
 
