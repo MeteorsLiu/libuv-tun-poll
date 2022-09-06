@@ -9,6 +9,8 @@
 #include <linux/if_tun.h>
 
 #include <stdlib.h>
+#include <features.h>
+
 #ifdef _GNU_SOURCE
 
 #define __USE_GNU
