@@ -35,7 +35,7 @@ void on_read(uv_poll_t* handle, int status, int events) {
     len = splice(t->fd, &in_off, t->pipefd[1], NULL, 1500, SPLICE_F_MOVE | SPLICE_F_MORE);
     
     if (len < 0) {
-        printf("pipe error")
+        printf("pipe error");
         exit_uv();
         return;
     }
