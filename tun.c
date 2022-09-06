@@ -65,8 +65,8 @@ int tun_create(char if_name[IFNAMSIZ], const char *wanted_name)
 
 
 int main(void) {
-    ctx t = malloc(sizeof struct tunContext);
-    buffer b = malloc(sizeof struct Buffer)
+    ctx t = malloc(sizeof(struct tunContext));
+    buffer b = malloc(sizeof(struct Buffer));
     b->vec.iov_len = 1500;
     b->vec.iov_base = b->data;
     t->fd = tun_create(t->if_name, "tun-0");
