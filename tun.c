@@ -9,7 +9,6 @@ struct tunContext
 {
     int fd;
     char   if_name[IFNAMSIZ];
-    int pipefd[2];
     buffer buf;
     uv_poll_t poll_handle;
 };
@@ -28,11 +27,11 @@ void signal_handler(int sig)
 }
 
 void on_read(uv_poll_t* handle, int status, int events) {
-     ctx t = (ctx)handle->data;
-
-    while ((t->buf->len = read(t->fd, t->buf->data, 1500)) < (ssize_t) 0)
+    ctx t = (ctx)handle->data;
+    ssize_t len = 0;
+    while ((len = read(t->fd, t->buf->data, 1500)) < (ssize_t) 0)
         ;
-        
+    t->buf->len = len;
     printf("Recv: %ld\n", t->buf->len);
 }
 
@@ -72,9 +71,6 @@ int main(void) {
         goto exit;
     }
     t->buf = b;
-    if (pipe(t->pipefd) < 0) {
-        goto exit;
-    }
     uv_poll_init(uv_default_loop(), &t->poll_handle, t->fd);
     uv_poll_start(&t->poll_handle, UV_READABLE, on_read);
     t->poll_handle.data = (void *)t;
@@ -85,10 +81,6 @@ int main(void) {
 exit:
     printf("Exit");
     close(t->fd);
-    if (t->pipefd[0] > 0 && t->pipefd[1] > 0) {
-        close(t->pipefd[0]);
-        close(t->pipefd[1]);
-    }
     free(t);
     free(b);
     return 0;
