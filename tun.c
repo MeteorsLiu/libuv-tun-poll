@@ -33,14 +33,9 @@ void on_read(uv_poll_t* handle, int status, int events) {
     off64_t in_off = 0;
     ssize_t len = 0;
     
-    len = splice(t->fd, &in_off, t->pipefd[1], NULL, 1500, SPLICE_F_MOVE);
-    
-    if (len < 0) {
-        printf("pipe error");
-        exit_uv();
-        return;
-    }
-    printf("Recv\n");
+    while ((len = read(t->fd, t->buf, 1500)) < (ssize_t) 0 && errno == EINTR)
+        ;
+    printf("Recv: %ld\n", len);
 }
 
 
