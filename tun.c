@@ -32,16 +32,7 @@ void on_read(uv_poll_t* handle, int status, int events) {
     // zero copy to pipe buffer
     off64_t in_off = 0;
     ssize_t len = 0;
-    len = splice(t->fd, &in_off, t->pipefd[1], NULL, 1500, SPLICE_F_MOVE | SPLICE_F_MORE);
-    
-    if (len < 0) {
-        printf("pipe error");
-        exit_uv();
-        return;
-    }
-
-    printf("Recv: %ld", len);
-
+    printf("read");
 }
 
 
@@ -93,6 +84,7 @@ int main(void) {
     signal(SIGQUIT, signal_handler);
     uv_run(uv_default_loop(), UV_RUN_DEFAULT);
 exit:
+    printf("Exit");
     close(t.fd);
     if (t.pipefd[0] > 0 && t.pipefd[1] > 0) {
         close(t.pipefd[0]);
