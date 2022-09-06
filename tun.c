@@ -3,7 +3,7 @@
 struct Buffer 
 {
     unsigned char data[1500];
-    struct iovec vec;
+    ssize_t len;
 };
 struct tunContext
 {
@@ -29,12 +29,11 @@ void signal_handler(int sig)
 
 void on_read(uv_poll_t* handle, int status, int events) {
      ctx t = (ctx)handle->data;
-    // zero copy to pipe buffer
-    off64_t in_off = 0;
-    ssize_t len = 0;
 
-    len = splice(t->fd, &in_off, t->pipefd[1], NULL, 1500, SPLICE_F_MOVE | SPLICE_F_MORE | SPLICE_F_NONBLOCK);
-    printf("Recv: %ld\n", len);
+    while ((t->len = read(t->fd, t->buf->data, 1500)) < (ssize_t) 0)
+        ;
+        
+    printf("Recv: %ld\n", t->len);
 }
 
 
@@ -45,7 +44,7 @@ int tun_create(char if_name[IFNAMSIZ], const char *wanted_name)
     int          fd;
     int          err;
 
-    fd = open("/dev/net/tun", O_RDWR);
+    fd = open("/dev/net/tun", O_RDWR | O_NONBLOCK);
     if (fd == -1) {
         fprintf(stderr, "tun module not present. See https://sk.tl/2RdReigK\n");
         return -1;
@@ -68,8 +67,6 @@ int tun_create(char if_name[IFNAMSIZ], const char *wanted_name)
 int main(void) {
     ctx t = malloc(sizeof(struct tunContext));
     buffer b = malloc(sizeof(struct Buffer));
-    b->vec.iov_len = 0;
-    b->vec.iov_base = b->data;
     t->fd = tun_create(t->if_name, "tun-0");
     if (t->fd < 0) {
         goto exit;
