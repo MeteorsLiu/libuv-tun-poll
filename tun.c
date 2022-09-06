@@ -28,10 +28,18 @@ void signal_handler(int sig)
 }
 
 void on_read(uv_poll_t* handle, int status, int events) {
+    struct tunContext *t = (struct tunContext *)handle->data;
     // zero copy to pipe buffer
     off64_t in_off = 0;
     ssize_t len = 0;
-    printf("read");
+    len = splice(t->fd, &in_off, t->pipefd[1], NULL, 1500, SPLICE_F_MOVE | SPLICE_F_MORE);
+    
+    if (len < 0) {
+        printf("pipe error");
+        exit_uv();
+        return;
+    }
+    printf("Recv:%ld\n", len);
 }
 
 
