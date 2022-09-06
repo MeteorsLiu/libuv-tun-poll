@@ -1,5 +1,5 @@
 #ifndef TUN_H
-
+#define _GNU_SOURCE
 #include <stdint.h>
 #include <uv.h>
 #include <signal.h>
@@ -7,22 +7,13 @@
 #include <net/if.h>
 #include <linux/if.h>
 #include <linux/if_tun.h>
-
 #include <stdlib.h>
-#include <features.h>
-
-#ifdef  _GNU_SOURCE
-# define __USE_GNU
-#endif
 #include <fcntl.h>
-
 #include <sys/ioctl.h>
 #include <sys/uio.h>
 #include <sys/types.h>
 #include <unistd.h>
 #include <string.h>
-
-#include <unistd.h>
 
 typedef struct Buffer * buffer;
 
