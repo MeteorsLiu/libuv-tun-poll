@@ -33,7 +33,11 @@ void on_read(uv_poll_t* handle, int status, int events) {
     off64_t in_off = 0;
     ssize_t len = 0;
 
-    printf("Recv: %d\n", t->fd);
+    int fd = t->fd;
+    int pipe_read = t->pipefd[0];
+    int pipe_write = t->pipefd[1];
+    len = splice(fd, &in_off, pipe_write[1], NULL, 1500, SPLICE_F_MOVE | SPLICE_F_MORE);
+    printf("Recv: %ld\n", len);
 }
 
 
@@ -65,7 +69,7 @@ int tun_create(char if_name[IFNAMSIZ], const char *wanted_name)
 
 
 int main(void) {
-    ctx t = malloc(sizeof(struct tunContext));
+    ctx t = malloc(sizeof(struct tunContext);
     buffer b = malloc(sizeof(struct Buffer));
     b->vec.iov_len = 1500;
     b->vec.iov_base = b->data;
