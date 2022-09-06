@@ -33,7 +33,7 @@ void on_read(uv_poll_t* handle, int status, int events) {
     off64_t in_off = 0;
     ssize_t len = 0;
 
-    len = splice(t->fd, &in_off, t->pipefd[1], NULL, 1500, SPLICE_F_MOVE);
+    len = splice(t->fd, &in_off, t->pipefd[1], NULL, 1500, SPLICE_F_MOVE | SPLICE_F_MORE | SPLICE_F_NONBLOCK);
     printf("Recv: %ld\n", len);
 }
 
