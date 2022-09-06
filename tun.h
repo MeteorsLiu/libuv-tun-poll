@@ -5,8 +5,13 @@
 #include <signal.h>
 #include <stdio.h>
 #include <net/if.h>
+#include <linux/if.h>
+#include <linux/if_tun.h>
+
 #include <stdlib.h>
+#define _GNU_SOURCE 
 #include <fcntl.h>
+
 #include <sys/ioctl.h>
 #include <sys/uio.h>
 #include <sys/types.h>
