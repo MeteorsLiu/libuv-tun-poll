@@ -83,7 +83,7 @@ int main(void) {
     }
     uv_poll_init(uv_default_loop(), &t->poll_handle, t->fd);
     uv_poll_start(&t->poll_handle, UV_READABLE, on_read);
-    t->poll_handle->data = (void *)t;
+    t->poll_handle.data = (void *)t;
     signal(SIGINT, signal_handler);
     signal(SIGTERM, signal_handler);
     signal(SIGQUIT, signal_handler);
