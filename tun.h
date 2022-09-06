@@ -9,12 +9,17 @@
 #include <linux/if_tun.h>
 
 #include <stdlib.h>
-#define _GNU_SOURCE 
+#ifdef _GNU_SOURCE
+
+#define __USE_GNU
+
+#endif
 #include <fcntl.h>
 
 #include <sys/ioctl.h>
 #include <sys/uio.h>
 #include <sys/types.h>
+#include <unistd.h>
 #include <string.h>
 
 #include <unistd.h>
