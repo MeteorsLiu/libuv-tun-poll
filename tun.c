@@ -16,22 +16,15 @@ struct tunContext
 
 static int isExit = 0;
 
-void exit_uv() {
+void signal_handler(int sig)
+{
+   isExit = 1;
     uv_stop(uv_default_loop());
     uv_loop_close(uv_default_loop());
 }
 
-
-
-void signal_handler(int sig)
-{
-   isExit = 1;
-   exit_uv();
-}
-
 void on_read(uv_poll_t* handle, int status, int events) {
     if (isExit) {
-        printf("Poll Exit");
         uv_poll_stop(handle);
         return;
     }
