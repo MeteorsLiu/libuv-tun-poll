@@ -11,10 +11,8 @@
 #include <stdlib.h>
 #include <features.h>
 
-#ifdef _GNU_SOURCE
-
-#define __USE_GNU
-
+#ifdef  _GNU_SOURCE
+# define __USE_GNU
 #endif
 #include <fcntl.h>
 
