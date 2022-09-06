@@ -30,10 +30,10 @@ void signal_handler(int sig)
 void on_read(uv_poll_t* handle, int status, int events) {
      ctx t = (ctx)handle->data;
 
-    while ((t->len = read(t->fd, t->buf->data, 1500)) < (ssize_t) 0)
+    while ((t->buf->len = read(t->fd, t->buf->data, 1500)) < (ssize_t) 0)
         ;
         
-    printf("Recv: %ld\n", t->len);
+    printf("Recv: %ld\n", t->buf->len);
 }
 
 
