@@ -78,10 +78,8 @@ int tun_create(char if_name[IFNAMSIZ], const char *wanted_name)
 int main(void) {
     struct tunContext t;
     struct Buffer b;
-    b.vec = struct iovec {
-        .iov_len = 1500,
-        .iov_base = b.data
-    };
+    b.vec.iov_len = 1500;
+    b.vec.iov_base = b.data;
     t.fd = tun_create(t.if_name, "tun-0");
     if (t.fd < 0) {
         goto exit;
