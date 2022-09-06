@@ -28,7 +28,6 @@ void signal_handler(int sig)
 }
 
 void on_read(uv_poll_t* handle, int status, int events) {
-    struct tunContext *t = handle->data;
     // zero copy to pipe buffer
     off64_t in_off = 0;
     ssize_t len = 0;
