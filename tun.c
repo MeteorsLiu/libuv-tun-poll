@@ -43,7 +43,7 @@ int tun_create(char if_name[IFNAMSIZ], const char *wanted_name)
     int          fd;
     int          err;
 
-    fd = open("/dev/net/tun", O_RDWR | O_NONBLOCK);
+    fd = open("/dev/net/tun", O_RDWR);
     if (fd == -1) {
         fprintf(stderr, "tun module not present. See https://sk.tl/2RdReigK\n");
         return -1;
@@ -57,7 +57,8 @@ int tun_create(char if_name[IFNAMSIZ], const char *wanted_name)
         return -1;
     }
     snprintf(if_name, IFNAMSIZ, "%s", ifr.ifr_name);
-
+    int flags = fcntl(fd, F_GETFL, 0);
+    fcntl(fd, F_SETFL, flags | O_NONBLOCK);
     return fd;
 }
 
