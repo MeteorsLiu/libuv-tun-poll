@@ -32,10 +32,8 @@ void on_read(uv_poll_t* handle, int status, int events) {
     // zero copy to pipe buffer
     off64_t in_off = 0;
     ssize_t len = 0;
-    
-    while ((len = read(t->fd, t->buf, 1500)) < (ssize_t) 0 && errno == EINTR)
-        ;
-    printf("Recv: %ld\n", len);
+
+    printf("Recv: %d\n", t->fd);
 }
 
 
