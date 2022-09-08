@@ -36,7 +36,7 @@ void do_poll(int fd, int pipefd[2]) {
     ssize_t len = 0;
     while (!isExit)
     {
-       if (len = splice(fd, &in, pipefd[1], NULL, 1500) > (ssize_t) 0) 
+       if (len = splice(fd, &in, pipefd[1], NULL, 1500, SPLICE_F_MOVE | SPLICE_F_NONBLOCK) > (ssize_t) 0) 
        {
            printf("recv:%ld", len);
        }
